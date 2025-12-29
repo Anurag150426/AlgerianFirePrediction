@@ -8,13 +8,8 @@ app = Flask(__name__)
 model = pickle.load(open('models/ridge_model.pkl','rb'))
 scaler = pickle.load(open("models/scaler.pkl","rb"))
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-@app.route("/predict_datapoint", methods=["GET", "POST"])
-def predict_datapoint():
-    
+@app.route("/", methods=["GET", "POST"])
+def home():
     if request.method == "POST":
         Temperature = float(request.form.get("Temperature"))
         RH = float(request.form.get("RH"))
@@ -23,20 +18,17 @@ def predict_datapoint():
 
         FFMC = float(request.form.get("FFMC"))
         DMC = float(request.form.get("DMC"))
+        DC = float(request.form.get("DC"))
         ISI = float(request.form.get("ISI"))
 
         Classes = float(request.form.get("Classes"))
         Region = float(request.form.get("Region"))
 
         new_data = scaler.transform([[Temperature, RH, Ws, Rain,
-                                      FFMC, DMC, ISI,
+                                      FFMC, DMC, DC, ISI,
                                       Classes, Region]])
-
         result = model.predict(new_data)[0]
 
         return render_template("home.html", result=result)
-    else:
-        return render_template("home.html", result="Something went wrong")
 
-if __name__ == "__main__":
-    app.run (host="0.0.0.0", port=5000)
+    return render_template("home.html")
