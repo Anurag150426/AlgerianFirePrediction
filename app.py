@@ -18,13 +18,12 @@ def home():
 
         FFMC = float(request.form.get("FFMC"))
         DMC = float(request.form.get("DMC"))
-        DC = float(request.form.get("DC"))
         ISI = float(request.form.get("ISI"))
 
         Classes = float(request.form.get("Classes"))
         Region = float(request.form.get("Region"))
         new_data = scaler.transform([[Temperature, RH, Ws, Rain,
-                                      FFMC, DMC, DC, ISI,
+                                      FFMC, DMC, ISI,
                                       Classes, Region]])
         result = model.predict(new_data)[0]
 
